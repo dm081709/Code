@@ -1,0 +1,357 @@
+import pygame
+import sys
+import random
+import time
+
+mainClock = pygame.time.Clock()
+from pygame.locals import *
+
+pygame.init()
+
+screen = pygame.display.set_mode((500, 700))
+pygame.display.set_caption("Image Button Example")
+bg = pygame.image.load("Snake Ig Background (1).png")
+screen.blit(bg, (0, 0))
+pygame.display.flip()
+
+text_font = pygame.font.Font("PressStart2P-vaV7.ttf", 25)
+
+
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x, y))
+
+
+def main_menu():
+    click = False
+    while True:
+        draw_text("Missions", text_font, (0, 0, 0), 418, 275)
+        draw_text("Settings", text_font, (0, 0, 0), 425, 60)
+        draw_text("Rules", text_font, (0, 0, 0), 16, 70)
+
+        mx, my = pygame.mouse.get_pos()
+
+        button_1_img = pygame.image.load("start.png")  # Load your image for button 1
+        button_2_img = pygame.image.load("scroll.png")  # Load your image for button 2
+        button_3_img = pygame.image.load("Settings.png")  # Load your image for button 3
+        button_4_img = pygame.image.load("Menu.png")  # Load your image for button 4
+
+        button_1_rect = button_1_img.get_rect(topleft=(100, 450))  # Set the position of button 1
+        button_2_rect = button_2_img.get_rect(topleft=(425, 200))  # Set the position of button 2
+        button_3_rect = button_3_img.get_rect(topleft=(425, 3))  # Set the position of button 3
+        button_4_rect = button_4_img.get_rect(topleft=(10, 3))  # Set the position of button 4
+
+        screen.blit(button_1_img, button_1_rect)
+        screen.blit(button_2_img, button_2_rect)
+        screen.blit(button_3_img, button_3_rect)
+        screen.blit(button_4_img, button_4_rect)
+
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+        if button_1_rect.collidepoint((mx, my)):
+            if click:
+                game()
+        if button_2_rect.collidepoint((mx, my)):
+            if click:
+                scroll()
+        if button_3_rect.collidepoint((mx, my)):
+            if click:
+                settings()
+        if button_4_rect.collidepoint((mx, my)):
+            if click:
+                rules()
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+
+def game():
+    press_sfx = pygame.mixer.Sound("press_sound effect.mp3")
+    win = pygame.display.set_mode((500, 700))
+    pygame.display.set_caption("First Game")
+
+    walkRight = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.image.load('R3.png'),
+                 pygame.image.load('R4.png'), pygame.image.load('R5.png'), pygame.image.load('R6.png'),
+                 pygame.image.load('R7.png'), pygame.image.load('R8.png'), pygame.image.load('R9.png')]
+    walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'),
+                pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'),
+                pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
+    walkUp = [pygame.image.load('UP1.png'), pygame.image.load('UP2.png'), pygame.image.load('UP3.png'),
+              pygame.image.load('UP4.png'), pygame.image.load('UP5.png'), pygame.image.load('UP6.png'),
+              pygame.image.load('UP7.png'), pygame.image.load('UP8.png'), pygame.image.load('UP9.png')]
+    walkDown = [pygame.image.load('DOWN1.png'), pygame.image.load('DOWN2.png'), pygame.image.load('DOWN3.png'),
+                pygame.image.load('DOWN4.png'), pygame.image.load('DOWN5.png'), pygame.image.load('DOWN6.png'),
+                pygame.image.load('DOWN7.png'), pygame.image.load('DOWN8.png'), pygame.image.load('DOWN9.png')]
+    bg = pygame.image.load('Game background.png')
+    snake_background = pygame.image.load('Snake background.png')
+    char = pygame.image.load('L9.png')
+
+    letters_imgs = {
+        "A": pygame.image.load("Letter A.png"),
+        "B": pygame.image.load("Letter B.png"),
+        "C": pygame.image.load("Letter C.png"),
+        "D": pygame.image.load("Letter D.png"),
+        "E": pygame.image.load("Letter E.png"),
+        "F": pygame.image.load("Letter F.png"),
+        "G": pygame.image.load("Letter G.png"),
+        "H": pygame.image.load("Letter H.png"),
+        "I": pygame.image.load("Letter I.png"),
+        "J": pygame.image.load("Letter J.png"),
+        "K": pygame.image.load("Letter K.png"),
+        "L": pygame.image.load("Letter L.png"),
+        "M": pygame.image.load("Letter M.png"),
+        "N": pygame.image.load("Letter N.png"),
+        "O": pygame.image.load("Letter O.png"),
+        "P": pygame.image.load("Letter P.png"),
+        "Q": pygame.image.load("Letter Q.png"),
+        "R": pygame.image.load("Letter R.png"),
+        "S": pygame.image.load("Letter S.png"),
+        "T": pygame.image.load("Letter T.png"),
+        "U": pygame.image.load("Letter U.png"),
+        "V": pygame.image.load("Letter V.png"),
+        "W": pygame.image.load("Letter W.png"),
+        "X": pygame.image.load("Letter X.png"),
+        "Y": pygame.image.load("Letter Y.png"),
+        "Z": pygame.image.load("Letter Z.png"),
+    }
+
+    # Load the pop-up image
+    pop_up_img = pygame.image.load("Molecule Pop-Up.png")
+
+    list_of_popups = { "MOLECULE": pygame.image.load("Molecule Pop-Up.png"),
+                       "COMPOUND": pygame.image.load("Compound Pop Up.png"),
+                       "CHEMICAL": pygame.image.load("Chemical Pop Up.png"),
+                       "SOLVENT": pygame.image.load("Solvent Pop Up.png"),
+                       "REACTANT": pygame.image.load("Reactant Pop Up.png"),
+                     }
+
+    class Enemy:
+        def __init__(self, x, y, width, height, img):
+            self.x = x
+            self.y = y
+            self.width = width
+            self.height = height
+            self.img = img
+            self.rect = pygame.Rect(x, y, width, height)
+
+        def draw(self, win):
+            win.blit(self.img, (self.x, self.y))
+
+    # Function to redraw the game window
+    def redrawGameWindow():
+        global walkCount
+
+        win.blit(bg, (0, 0))
+        win.blit(snake_background, (0, 0))
+
+
+        # Increment walkCount for animation
+        if left or right or up or down:
+            if walkCount + 1 >= 27:
+                walkCount = 0
+            else:
+                walkCount += 1
+        else:
+            walkCount = 0
+
+        if left:
+            win.blit(walkLeft[walkCount // 3], (x, y))
+        elif right:
+            win.blit(walkRight[walkCount // 3], (x, y))
+        elif up:
+            win.blit(walkUp[walkCount // 3], (x, y))
+        elif down:
+            win.blit(walkDown[walkCount // 3], (x, y))
+        else:
+            win.blit(char, (x, y))
+
+        enemy.draw(win)  # Draw the enemy
+        pygame.display.update()
+
+    # Function to display the pop-up for a few seconds
+    def show_pop_up_for_seconds(img, seconds):
+        start_time = time.time()
+        while time.time() - start_time < seconds:
+            win.blit(img, (50, 50))  # Adjust the position as needed
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+    x = 50
+    y = 500
+    width = 40
+    height = 60
+    vel = 5
+    # List to keep track of collected letters
+    collected_letters = []
+
+    # List of words
+    words = ["MOLECULE", "COMPOUND", "CHEMICAL", "SOLVENT", "REACTANT"]
+
+    # Initialize index for the current word
+    word_index = 0
+
+    # Initial enemy (letter) position
+    enemy_x = random.randint(50, 240)
+    enemy_y = random.randint(150, 499)
+
+    # Create the first enemy with the first letter of the word
+    enemy = Enemy(enemy_x, enemy_y, 40, 40, letters_imgs[words[word_index][0]])
+
+    clock = pygame.time.Clock()
+
+    isJump = False
+    jumpCount = 10
+
+    left = False
+    right = False
+    up = False
+    down = False
+    walkCount = 0
+
+    run = True
+
+    while run:
+        clock.tick(27)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_LEFT] and x > 45:
+            x -= vel
+            left = True
+            right = False
+            up = False
+            down = False
+        elif keys[pygame.K_RIGHT] and x < 450 - vel - height:
+            x += vel
+            left = False
+            right = True
+            up = False
+            down = False
+        elif keys[pygame.K_UP] and y < 610 - vel - width:
+            y -= vel
+            left = False
+            right = False
+            up = True
+            down = False
+        elif keys[pygame.K_DOWN] and y < 620 - vel - width:
+            y += vel
+            left = False
+            right = False
+            up = False
+            down = True
+        else:
+            left = False
+            right = False
+            up = False
+            down = False
+            walkCount = 0
+
+        if not isJump:
+            if keys[pygame.K_SPACE]:
+                isJump = True
+                left = False
+                right = False
+                walkCount = 0
+        else:
+            if jumpCount >= -10:
+                y -= (jumpCount * abs(jumpCount)) * 0.5
+                jumpCount -= 1
+            else:
+                jumpCount = 10
+                isJump = False
+
+        # Check for collision between player and enemy
+        player_rect = pygame.Rect(x, y, width, height)
+        # Inside the game loop, replace the collision handling logic with this:
+        if player_rect.colliderect(enemy.rect):
+            press_sfx.play()
+            collected_letters.append(words[word_index][len(collected_letters)])
+
+            # If all letters of the word are collected, move to the next word
+            if len(collected_letters) == len(words[word_index]):
+                # Show the corresponding pop-up for 2 seconds using the list_of_popups dictionary
+                show_pop_up_for_seconds(list_of_popups[words[word_index]], 2)
+                collected_letters.clear()
+                word_index = (word_index + 1) % len(words)
+
+            # Spawn the next letter of the word
+            if len(collected_letters) < len(words[word_index]):
+                enemy_x = random.randint(50, 240)
+                enemy_y = random.randint(150, 499)
+                enemy = Enemy(enemy_x, enemy_y, 40, 40, letters_imgs[words[word_index][len(collected_letters)]])
+
+        redrawGameWindow()
+
+    pygame.quit()
+
+
+def scroll():
+    running = True
+    while running:
+        screen = pygame.display.set_mode((500, 700))
+        bg = pygame.image.load("Scroll Background.png")
+        screen.blit(bg, (0, 0))
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+
+
+def settings():
+    running = True
+    while running:
+        screen = pygame.display.set_mode((500, 700))
+        bg = pygame.image.load("Settings_BACKGROUND.png")
+        screen.blit(bg, (0, 0))
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+
+
+def rules():
+    running = True
+    while running:
+        screen = pygame.display.set_mode((500, 700))
+        bg = pygame.image.load("Scroll Background.png")
+        screen.blit(bg, (0, 0))
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+
+
+main_menu()
