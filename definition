@@ -1,0 +1,226 @@
+import pygame
+import sys
+from pygame.locals import *
+
+pygame.init()
+
+# Screen dimensions
+screen_width = 500
+screen_height = 700
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Button Example")
+bg = pygame.image.load("Def bg.png")
+
+# Colors
+white = (255, 255, 255)
+black = (0, 0, 0)
+gray = (200, 200, 200)
+green = (0, 255, 0)
+
+# Fonts
+font = pygame.font.Font(None, 36)
+
+# Button class
+class Button:
+    def __init__(self, x, y, width, height, text):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.color = gray
+        self.text = text
+        self.font = font
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, self.color, self.rect)
+        text_surface = self.font.render(self.text, True, black)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
+
+    def is_clicked(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                return True
+        return False
+
+
+
+# Create a button instance
+button1 = Button(150, 200, 200, 50, "Level 1")
+button2 = Button(150, 300, 200, 50, "Level 2")
+button3 = Button(150, 400, 200, 50, "Level 3")
+
+def main():
+    running = True
+    def show_pop_up_for_seconds(img, seconds):
+        start_time = time.time()
+        while time.time() - start_time < seconds:
+            win.blit(img, (50, 50))  # Adjust the position as needed
+            pygame.display.update()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == KEYDOWN and event.key == K_ESCAPE:
+                    return  # Exit pop-up display on ESC key
+
+    while running:
+        screen.blit(bg, (0, 0))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            def Level_1():
+                # Create a button instance
+                button1 = Button(10, 90, 110, 25, "Molecule")
+                button2 = Button(45, 1, 130, 25, "Compound")
+                button3 = Button(200, 1, 120, 25, "Chemical")
+                button4 = Button(350, 1, 100, 25, "Solvent")
+                button5 = Button(390, 90, 105, 25, "Reactant")
+
+                def1 = pygame.image.load("L1D1.png")
+                def2 = pygame.image.load("L1D2.png")
+                def3 = pygame.image.load("L1D3.png")
+                def4 = pygame.image.load("L1D4.png")
+                def5 = pygame.image.load("L1D5.png")
+                def m():
+                    running = True
+                    while running:
+
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                pygame.quit()
+                                sys.exit()
+                            if event.type == KEYDOWN:
+                                if event.key == K_ESCAPE:
+                                    running = False
+                                    main()
+
+                            if button1.is_clicked(event):
+                                screen.blit(def1, (0, 0))
+                            if button2.is_clicked(event):
+                                screen.blit(def2, (0, 0))
+                            if button3.is_clicked(event):
+                                screen.blit(def3, (0, 0))
+                            if button4.is_clicked(event):
+                                screen.blit(def4, (0, 0))
+                            if button5.is_clicked(event):
+                                screen.blit(def5, (0, 0))
+
+                        button1.draw(screen)
+                        button2.draw(screen)
+                        button3.draw(screen)
+                        button4.draw(screen)
+                        button5.draw(screen)
+                        pygame.display.flip()
+
+                if __name__ == "__main__":
+                    m()
+
+            def Level_2():
+                # Create a button instance
+                button1 = Button(20, 115, 140, 25, "Distillation")
+                button2 = Button(30, 1, 150, 25, "Sublimation")
+                button3 = Button(200, 1, 140, 25, "Equilibrium")
+                button4 = Button(360, 1, 115, 25, "Solubility")
+                button5 = Button(320, 115, 170, 25, "Condensation")
+
+                def1 = pygame.image.load("L2D1.png")
+                def2 = pygame.image.load("L2D2.png")
+                def3 = pygame.image.load("L2D3.png")
+                def4 = pygame.image.load("L2D4.png")
+                def5 = pygame.image.load("L2D5.png")
+
+                def ma():
+                    running = True
+                    while running:
+
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                pygame.quit()
+                                sys.exit()
+                            if event.type == KEYDOWN:
+                                if event.key == K_ESCAPE:
+                                    running = False
+                                    main()
+
+                            if button1.is_clicked(event):
+                                screen.blit(def1, (0, 0))
+                            if button2.is_clicked(event):
+                                screen.blit(def2, (0, 0))
+                            if button3.is_clicked(event):
+                                screen.blit(def3, (0, 0))
+                            if button4.is_clicked(event):
+                                screen.blit(def4, (0, 0))
+                            if button5.is_clicked(event):
+                                screen.blit(def5, (0, 0))
+
+                        button1.draw(screen)
+                        button2.draw(screen)
+                        button3.draw(screen)
+                        button4.draw(screen)
+                        button5.draw(screen)
+                        pygame.display.flip()
+
+                if __name__ == "__main__":
+                    ma()
+            def Level_3():
+                # Create a button instance
+                button1 = Button(20, 115, 140, 25, "Exothermic")
+                button2 = Button(40, 1, 100, 25, "Ketone")
+                button3 = Button(180, 1, 100, 25, "Ligand")
+                button4 = Button(320, 1, 160, 25, "Radioactivity")
+                button5 = Button(280, 115, 210, 25, "Thermodynamics")
+
+                def1 = pygame.image.load("L3D1.png")
+                def2 = pygame.image.load("L3D2.png")
+                def3 = pygame.image.load("L3D3.png")
+                def4 = pygame.image.load("L3D4.png")
+                def5 = pygame.image.load("L3D5.png")
+
+                def mai():
+                    running = True
+                    while running:
+
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                pygame.quit()
+                                sys.exit()
+                            if event.type == KEYDOWN:
+                                if event.key == K_ESCAPE:
+                                    running = False
+                                    main()
+
+                            if button1.is_clicked(event):
+                                screen.blit(def1, (0, 0))
+                            if button2.is_clicked(event):
+                                screen.blit(def2, (0, 0))
+                            if button3.is_clicked(event):
+                                screen.blit(def3, (0, 0))
+                            if button4.is_clicked(event):
+                                screen.blit(def4, (0, 0))
+                            if button5.is_clicked(event):
+                                screen.blit(def5, (0, 0))
+
+                        button1.draw(screen)
+                        button2.draw(screen)
+                        button3.draw(screen)
+                        button4.draw(screen)
+                        button5.draw(screen)
+                        pygame.display.flip()
+
+                if __name__ == "__main__":
+                    mai()
+
+            if button1.is_clicked(event):
+                Level_1()
+            if button2.is_clicked(event):
+                Level_2()
+            if button3.is_clicked(event):
+                Level_3()
+
+        button1.draw(screen)
+        button2.draw(screen)
+        button3.draw(screen)
+        pygame.display.flip()
+
+if __name__ == "__main__":
+    main()
